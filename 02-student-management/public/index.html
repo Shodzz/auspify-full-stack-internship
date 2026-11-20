@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Records</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234338ca'/%3E%3Cpath d='M6 13l10-5 10 5-10 5z M10 15v5c3 3 9 3 12 0v-5' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-row">
+      <div class="logo">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7"/><path d="M6 13l10-5 10 5-10 5z M10 15v5c3 3 9 3 12 0v-5"/></svg>
+        <div>
+          <strong>Student Records</strong>
+          <span>Admin console</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="addBtn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Add student</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="stats" id="stats" aria-label="Summary">
+      <button class="stat" data-status="" type="button"><span class="stat-label">All students</span><span class="stat-value" data-count="total">-</span></button>
+      <button class="stat" data-status="active" type="button"><span class="stat-label">Active</span><span class="stat-value" data-count="active">-</span></button>
+      <button class="stat" data-status="on leave" type="button"><span class="stat-label">On leave</span><span class="stat-value" data-count="on leave">-</span></button>
+      <button class="stat" data-status="graduated" type="button"><span class="stat-label">Graduated</span><span class="stat-value" data-count="graduated">-</span></button>
+    </section>
+
+    <section class="panel">
+      <div class="toolbar">
+        <label class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="search" type="search" placeholder="Search by name, roll no or email" aria-label="Search students" autocomplete="off">
+        </label>
+        <select id="courseFilter" aria-label="Filter by course"><option value="">All courses</option></select>
+        <select id="statusFilter" aria-label="Filter by status"><option value="">Any status</option></select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table" id="table">
+          <thead>
+            <tr>
+              <th><button class="sort" data-sort="roll_no" type="button">Roll no</button></th>
+              <th><button class="sort" data-sort="name" type="button">Name</button></th>
+              <th><button class="sort" data-sort="course" type="button">Course</button></th>
+              <th><button class="sort" data-sort="year" type="button">Year</button></th>
+              <th><button class="sort" data-sort="enrolled_on" type="button">Enrolled</button></th>
+              <th><button class="sort" data-sort="status" type="button">Status</button></th>
+              <th class="ta-right"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+
+        <div class="state" id="emptyState" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4z M7 9v5c3 2.5 7 2.5 10 0V9"/></svg>
+          <h3 id="emptyTitle">No students yet</h3>
+          <p id="emptyText">Add your first student, or run <code>npm run seed</code> to load sample data.</p>
+          <button class="btn btn-ghost" id="emptyAction" type="button">Add student</button>
+        </div>
+
+        <div class="state" id="errorState" hidden>
+          <h3>Could not load students</h3>
+          <p id="errorText"></p>
+          <button class="btn btn-ghost" id="retryBtn" type="button">Try again</button>
+        </div>
+      </div>
+
+      <footer class="pager" id="pager">
+        <p id="pageInfo" aria-live="polite"></p>
+        <div class="pager-ctrls">
+          <label class="per-page">Rows
+            <select id="perPage"><option>10</option><option>25</option><option>50</option></select>
+          </label>
+          <button class="btn btn-ghost btn-sm" id="prevBtn" type="button" aria-label="Previous page">&larr;</button>
+          <span id="pageNum">1 / 1</span>
+          <button class="btn btn-ghost btn-sm" id="nextBtn" type="button" aria-label="Next page">&rarr;</button>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <dialog class="modal" id="formDialog" aria-labelledby="formTitle">
+    <form id="studentForm" novalidate>
+      <header class="modal-head">
+        <h2 id="formTitle">Add student</h2>
+        <button class="icon-btn" type="button" data-close aria-label="Close">&times;</button>
+      </header>
+      <div class="modal-body grid-2">
+        <div class="field"><label for="roll_no">Roll number</label><input id="roll_no" name="roll_no" placeholder="CS24-017" maxlength="20" required><p class="err" data-for="roll_no"></p></div>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" maxlength="120" required><p class="err" data-for="email"></p></div>
+        <div class="field"><label for="first_name">First name</label><input id="first_name" name="first_name" maxlength="50" required><p class="err" data-for="first_name"></p></div>
+        <div class="field"><label for="last_name">Last name</label><input id="last_name" name="last_name" maxlength="50" required><p class="err" data-for="last_name"></p></div>
+        <div class="field"><label for="course">Course</label><select id="course" name="course" required><option value="">Choose...</option></select><p class="err" data-for="course"></p></div>
+        <div class="field"><label for="year">Year</label><select id="year" name="year" required><option value="1">1st year</option><option value="2">2nd year</option><option value="3">3rd year</option><option value="4">4th year</option><option value="5">5th year</option></select><p class="err" data-for="year"></p></div>
+        <div class="field"><label for="enrolled_on">Enrolled on</label><input id="enrolled_on" name="enrolled_on" type="date" required><p class="err" data-for="enrolled_on"></p></div>
+        <div class="field"><label for="status">Status</label><select id="status" name="status"></select><p class="err" data-for="status"></p></div>
+        <div class="field span-2"><label for="phone">Phone <span class="muted">(optional)</span></label><input id="phone" name="phone" type="tel" maxlength="20"><p class="err" data-for="phone"></p></div>
+      </div>
+      <footer class="modal-foot">
+        <p class="form-error" id="formError" role="alert"></p>
+        <button class="btn btn-ghost" type="button" data-close>Cancel</button>
+        <button class="btn btn-primary" type="submit" id="saveBtn">Save</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="modal modal-sm" id="confirmDialog" aria-labelledby="confirmTitle">
+    <div class="modal-body">
+      <h2 id="confirmTitle">Delete student?</h2>
+      <p id="confirmText"></p>
+    </div>
+    <footer class="modal-foot">
+      <button class="btn btn-ghost" type="button" data-close>Cancel</button>
+      <button class="btn btn-danger" type="button" id="confirmBtn">Delete</button>
+    </footer>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+</body>
+</html>

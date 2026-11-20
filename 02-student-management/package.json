@@ -1,0 +1,21 @@
+{
+  "name": "student-management",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CRUD app for student records: Express REST API, SQLite, vanilla JS front end",
+  "author": "Shady Mamdouh Kamal Labib Zaki",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "dev": "node --watch --env-file-if-exists=.env server/index.js",
+    "seed": "node --env-file-if-exists=.env scripts/seed.js",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "helmet": "^8.3.0"
+  }
+}
