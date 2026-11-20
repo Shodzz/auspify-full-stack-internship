@@ -12,7 +12,7 @@ lives in its own folder.
 | **Offer letter ID** | AT/INT/2043639 |
 | **Location** | Cairo, Egypt |
 | **GitHub** | https://github.com/Shodzz |
-| **Repository** | PENDING: URL to be added once the repository is created |
+| **Repository** | CREATED : https://github.com/Shodzz/auspify-full-stack-internship |
 
 ## Projects
 
